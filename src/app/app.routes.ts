@@ -6,8 +6,7 @@ export const routes: Routes = [
     { 
       path: '', 
       component: HomepageComponent, 
-      canActivate: [AuthGuard],
-      data: { roles: ['brand-users-role'] },
+      canActivate: [AuthGuard]
     },
     { path: '**', redirectTo: '' },
   ];
