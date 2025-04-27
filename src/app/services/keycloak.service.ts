@@ -8,8 +8,11 @@ export class KeycloakOperationService {
   isLoggedIn(): boolean {
     return this.keycloak.isLoggedIn();
   }
-  logout(): void {
-    this.keycloak.logout();
+  logout(redirectUrl: any): void {
+    this.keycloak.logout(redirectUrl);
+  }
+  login(): void {
+    this.keycloak.login();
   }
   getUserProfile(): any {
     return this.keycloak.loadUserProfile();

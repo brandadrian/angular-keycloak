@@ -1,0 +1,12 @@
+<mat-toolbar color="primary">
+  <div class="toolbar-content">
+    <button mat-icon-button (click)="menuToggle.emit()" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>brandadrian</span>
+    <span class="spacer"></span>
+    <button mat-button (click)="loginToggle.emit()">
+      {{ isLoggedIn ? 'Logout' : 'Login' }}
+    </button>
+  </div>
+</mat-toolbar>

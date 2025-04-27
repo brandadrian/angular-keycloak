@@ -1,1 +1,15 @@
-<router-outlet />
+<app-header
+  (menuToggle)="sidenav.toggle()" 
+  [isLoggedIn]="isLoggedIn" 
+  (loginToggle)="toggleLogin()"
+></app-header>
+
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="side" opened class="sidebar">
+    <app-navigation></app-navigation>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
