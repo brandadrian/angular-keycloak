@@ -1,0 +1,19 @@
+<mat-card *ngIf="hasRole">
+  <mat-card-header>
+    <mat-card-title>Admin Area</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Welcome! You have the <strong>brandclient-role-admin</strong> role and can access this admin area.</p>
+  </mat-card-content>
+</mat-card>
+
+<div *ngIf="!hasRole">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Access Denied</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>You do not have permission to view this page.</p>
+    </mat-card-content>
+  </mat-card>
+</div>

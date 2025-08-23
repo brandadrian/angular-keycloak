@@ -1,59 +1,70 @@
 # AngularKeycloakWeb
+Simple angular app with keycloak integration.
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+# Getting started
+To start the app you'll have to start keycloak in docker and start the angular app as follows.
 
-## Development server
+## Keycloak Setup Instructions
 
-To start a local development server, run:
+To set up Keycloak for local development with this Angular app, follow these steps:
 
-```bash
+### 1. Start Keycloak with Docker Compose
+
+Run the following command in the project root:
+
+```powershell
+docker compose up -d
+```
+
+This will start a Keycloak server with default credentials:
+- Username: `admin`
+- Password: `admin`
+- Keycloak URL: `http://localhost:8080`
+
+### 1. Create a Client
+1. In your realm, go to **Clients**
+2. Click **Create client**
+3. Enter a client ID (e.g., `angular-app`)
+4. Set **Client type** to `OpenID Connect`
+5. Set **Root URL** to `http://localhost:4200`
+6. Save the client
+
+### 2. Configure Client Settings
+- In the client settings, set **Valid Redirect URIs** to `http://localhost:4200/*`
+- Set **Web Origins** to `+`
+
+### 3. Create a User
+1. Go to **Users**
+2. Click **Add user** and fill in the details
+3. After creating, go to **Credentials** and set a password
+
+### 4. Create a Role
+1. Go to **Roles**
+2. Click **Add role**
+
+### 5. Assign Role to User
+1. Go to the user details
+2. Assign the role to the user
+
+### 8. Silent SSO Asset
+The file `frontend/src/assets/silent-check-sso.html` is used for silent SSO checks. Ensure your Keycloak client settings allow silent authentication if you use this feature. This prevents logging out when refreshing the page.
+
+---
+
+For more details, see the official Keycloak documentation: https://www.keycloak.org/documentation
+
+
+## Start Angular App
+
+Run the following commands in the `frontend` directory:
+
+```powershell
+cd frontend
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+The app will be available at:
 ```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+http://localhost:4200
 ```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

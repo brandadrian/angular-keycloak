@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+  <div class="toolbar-content">
+    <button mat-icon-button (click)="menuToggle.emit()" class="menu-button">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Keycloak Integration Sample App</span>
+    <span class="spacer"></span>
+    <button mat-button (click)="loginToggle.emit()">
+      {{ isLoggedIn ? 'Logout' : 'Login' }}
+    </button>
+  </div>
+  <div *ngIf="isLoggedIn && userName" class="user-info-block">
+    <div>{{ userName }}</div>
+  </div>
+</mat-toolbar>
