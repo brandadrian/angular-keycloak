@@ -3,7 +3,7 @@ Simple [ExpressJs](https://expressjs.com) backend and [Angular](https://angular.
 
 **Features**
 - Login and logout
-- Load todos from protected routes
+- Load todos from protected routes using users access token from login
 - Display user information loaded from keycloak  
 
 # Getting started
