@@ -1,5 +1,10 @@
 # Angular Keycloak
-Simple angular app with keycloak integration.
+Simple [ExpressJs](https://expressjs.com) backend and [Angular](https://angular.dev) frontend with [Keycloak](https://www.keycloak.org) integration. Used for personal education and tests.
+
+**Features**
+- Login and logout
+- Load todos from protected routes
+- Display user information loaded from keycloak  
 
 # Getting started
 To start the app you'll have to start keycloak in docker and start the angular app as follows.
