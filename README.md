@@ -59,7 +59,6 @@ For more details, see the official Keycloak documentation: https://www.keycloak.
 Run the following commands in the `frontend` directory:
 
 ```powershell
-cd frontend
 npm install
 ng serve
 ```
@@ -67,4 +66,18 @@ ng serve
 The app will be available at:
 ```
 http://localhost:4200
+```
+
+## Start Backend App
+
+Run the following commands in the `backend` directory:
+
+```powershell
+npm install
+npm start
+```
+
+The backend will be available at:
+```
+http://localhost:9090
 ```
