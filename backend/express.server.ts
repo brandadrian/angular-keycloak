@@ -22,7 +22,7 @@ app.get("/todos", keycloak.protect('realm:brandclient-role-admin'), (req: Reques
   res.json(todos);
 });
 
-app.get("/todos-first", keycloak.protect('realm:brandclient-role-user'), protectedRoutes, (req: Request, res: Response) => {
+app.get("/todos-first", keycloak.protect('realm:brandclient-role-user'), (req: Request, res: Response) => {
   res.json(todos[0]);
 });
 
