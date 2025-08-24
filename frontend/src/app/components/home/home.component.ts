@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, VERSION } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,12 +10,9 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, FormsModule],
 })
 export class HomepageComponent implements OnInit {
+  angularVersion = VERSION.full;
 
-
-  constructor(
-
-  ) {}
-  ngOnInit(): void {
-
-  }
+  constructor() {}
+  
+  ngOnInit(): void {}
 }
