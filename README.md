@@ -46,7 +46,7 @@ This will start a Keycloak server with default credentials:
 1. Go to the user details
 2. Assign the role to the user
 
-### 8. Silent SSO Asset
+### 6. Silent SSO Asset
 The file `frontend/src/assets/silent-check-sso.html` is used for silent SSO checks. Ensure your Keycloak client settings allow silent authentication if you use this feature. This prevents logging out when refreshing the page.
 
 ---
