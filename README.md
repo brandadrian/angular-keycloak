@@ -1,4 +1,4 @@
-# AngularKeycloakWeb
+# Angular Keycloak
 Simple angular app with keycloak integration.
 
 # Getting started
