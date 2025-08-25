@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { KeycloakOperationService } from '../../services/keycloak.service';
+import { AuthOidcService } from '../../services/auth-oidc.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { Observable, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile',
@@ -17,26 +19,38 @@ import { CommonModule } from '@angular/common';
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent implements OnInit {
-  userProfile: any | null = null;
-  userProfileJson: string = '';
-  userRolesJson: string = '';
-  userTokenJson: string = '';
+  userData$: Observable<any>;
+  userProfileJson$: Observable<string>;
+  userRolesJson$: Observable<string>;
+  userTokenJson$: Observable<string>;
 
   constructor(
-    private keyCloakService: KeycloakOperationService,
-  ) {}
-  ngOnInit(): void {
-    this.keyCloakService.getUserProfile().then((data: any) => {
-      this.userProfile = data;
-      this.userProfileJson = JSON.parse(JSON.stringify(data));
-    });
-
-    const roles = this.keyCloakService.getUserRoles();
-    this.userRolesJson = JSON.parse(JSON.stringify(roles));
-
-    this.keyCloakService.getToken().then((data: any) => {
-      const decoded = JSON.parse(atob(data.split('.')[1]));
-      this.userTokenJson = JSON.parse(JSON.stringify(decoded));
-    });
+    private authService: AuthOidcService,
+  ) {
+    this.userData$ = this.authService.getUserData();
+    
+    this.userProfileJson$ = this.userData$.pipe(
+      map(data => JSON.stringify(data, null, 2))
+    );
+    
+    this.userRolesJson$ = this.userData$.pipe(
+      map(data => JSON.stringify(data?.userData?.realm_access?.roles || [], null, 2))
+    );
+    
+    this.userTokenJson$ = this.authService.getAccessToken().pipe(
+      map(token => {
+        if (token) {
+          try {
+            const decoded = JSON.parse(atob(token.split('.')[1]));
+            return JSON.stringify(decoded, null, 2);
+          } catch (e) {
+            return 'Error decoding token';
+          }
+        }
+        return 'No token available';
+      })
+    );
   }
+
+  ngOnInit(): void {}
 }

@@ -1,47 +1,45 @@
 import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  Router,
-  RouterStateSnapshot,
-} from "@angular/router";
-import { KeycloakAuthGuard, KeycloakService } from "keycloak-angular";
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
+import { Observable, of } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
+import { AuthOidcService } from "../services/auth-oidc.service";
 
 @Injectable({
   providedIn: "root",
 })
-export class AuthGuard extends KeycloakAuthGuard {
+export class AuthGuard implements CanActivate {
   constructor(
-    protected override readonly router: Router,
-    protected readonly keycloak: KeycloakService
-  ) {
-    super(router, keycloak);
-  }
+    private router: Router,
+    private authService: AuthOidcService
+  ) {}
 
-  public async isAccessAllowed(
+  canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ) {
-    // Force the user to log in if currently unauthenticated.
-    if (!this.authenticated) {
-      await this.keycloak.login({
-        redirectUri: window.location.origin + state.url,
-      });
-    }
+  ): Observable<boolean> {
+    return this.authService.isAuthenticated$().pipe(
+      switchMap(isAuthenticated => {
+        if (!isAuthenticated) {
+          this.authService.login();
+          return of(false);
+        }
 
-    // Get the roles required from the route.
-    const requiredRoles = route.data["roles"];
+        // Get the roles required from the route.
+        const requiredRoles = route.data["roles"];
 
-    const token = await this.keycloak.getToken();
-    const decoded = JSON.parse(atob(token.split('.')[1]));
-    console.log("Decoded Token:", decoded);
+        // Allow the user to proceed if no additional roles are required to access the route.
+        if (!Array.isArray(requiredRoles) || requiredRoles.length === 0) {
+          return of(true);
+        }
 
-    console.warn("DATA", JSON.stringify(route.data));
-    // Allow the user to proceed if no additional roles are required to access the route.
-    if (!Array.isArray(requiredRoles) || requiredRoles.length === 0) {
-      return true;
-    }
-
-    // Allow the user to proceed if all the required roles are present.
-    return requiredRoles.every((role) => this.roles.includes(role));
+        // Check if user has all required roles
+        return this.authService.getUserData().pipe(
+          map(userData => {
+            const userRoles = userData?.realm_access?.roles || [];
+            return requiredRoles.every((role: string) => userRoles.includes(role));
+          })
+        );
+      })
+    );
   }
 }

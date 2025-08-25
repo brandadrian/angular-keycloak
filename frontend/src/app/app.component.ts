@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { KeycloakAngularModule } from 'keycloak-angular';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -9,7 +8,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationComponent } from "./components/navigation/navigation.component";
 import { HeaderComponent } from './components/header/header.component';
-import { KeycloakOperationService } from './services/keycloak.service';
+import { AuthOidcService } from './services/auth-oidc.service';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,6 @@ import { KeycloakOperationService } from './services/keycloak.service';
     MatListModule,
     MatIconModule,
     RouterOutlet,
-    KeycloakAngularModule,
     HttpClientModule,
     NavigationComponent,
     HeaderComponent,
@@ -29,30 +28,15 @@ import { KeycloakOperationService } from './services/keycloak.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'angular-k-web';
-  isLoggedIn = false;
-  userName: string = '';
-  userRoles: string[] = [];
 
   constructor(
-    private keyCloakService: KeycloakOperationService,
+    private authService: AuthOidcService,
+    private oidcSecurityService: OidcSecurityService
   ) {}
-  async ngOnInit(): Promise<void> {
-      this.isLoggedIn = this.keyCloakService.isLoggedIn();
-      if (this.isLoggedIn) {
-        const profile = await this.keyCloakService.getUserProfile();
-        this.userName = profile?.username || profile?.email || '';
-        this.userRoles = this.keyCloakService.getUserRoles();
-      }
-  }
 
-  toggleLogin() {
-    this.isLoggedIn = !this.isLoggedIn;
-    if (this.keyCloakService.isLoggedIn()) {
-      this.keyCloakService.logout(window.location.origin);
-    } else {
-      this.keyCloakService.login();
-    }
+  ngOnInit(): void {
+    this.oidcSecurityService.checkAuth().subscribe();
   }
 }

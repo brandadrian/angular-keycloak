@@ -5,11 +5,14 @@
     </button>
     <span>Angular Keycloak</span>
     <span class="spacer"></span>
-    <button mat-button (click)="loginToggle.emit()">
-      {{ isLoggedIn ? 'Logout' : 'Login' }}
-    </button>
+    <ng-container *ngIf="isAuthenticated$ | async; else loginButton">
+      <button mat-button (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-template #loginButton>
+      <button mat-button (click)="login()">Login</button>
+    </ng-template>
   </div>
-  <div *ngIf="isLoggedIn && userName" class="user-info-block">
-    <div>{{ userName }}</div>
+  <div *ngIf="(isAuthenticated$ | async) && (userData$ | async) as user" class="user-info-block">
+    <div>{{ user?.userData?.preferred_username || user?.userData?.name || user?.preferred_username || user?.name || 'User' }}</div>
   </div>
 </mat-toolbar>

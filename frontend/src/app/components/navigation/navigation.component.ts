@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
-import { KeycloakOperationService } from '../../services/keycloak.service';
+import { AuthOidcService } from '../../services/auth-oidc.service';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -11,17 +12,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
-  constructor(private keycloakService: KeycloakOperationService) {}
+  isAuthenticated$: Observable<boolean>;
+  hasAdminRole$: Observable<boolean>;
+  hasUserRole$: Observable<boolean>;
 
-  get isLoggedIn(): boolean {
-    return this.keycloakService.isLoggedIn();
-  }
-  
-  get hasAdminRole(): boolean {
-    return this.keycloakService.hasAdminRole();
-  }
-
-  get hasUserRole(): boolean {
-    return this.keycloakService.hasUserRole();
+  constructor(private authService: AuthOidcService) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$();
+    this.hasAdminRole$ = this.authService.hasAdminRole();
+    this.hasUserRole$ = this.authService.hasUserRole();
   }
 }

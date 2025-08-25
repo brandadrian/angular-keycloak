@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Todo } from '../models/todos';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TodosService {
-  private readonly backendUrl = 'http://localhost:9090';
+  private readonly backendUrl = environment.backendUrl;
   constructor(private http: HttpClient) {}
 
   getFirstTodo(): Observable<Array<Todo>> {
